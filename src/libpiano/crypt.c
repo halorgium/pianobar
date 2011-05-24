@@ -47,7 +47,8 @@ char *PianoDecryptString (gcry_cipher_hd_t h, const char * const input,
 
 	output = calloc (outputLen+1, sizeof (*output));
 	/* hex decode */
-	for (size_t i = 0; i < outputLen; i++) {
+	size_t i;
+	for (i = 0; i < outputLen; i++) {
 		char hex[3];
 		memcpy (hex, &input[i*2], 2);
 		hex[2] = '\0';
@@ -87,8 +88,9 @@ char *PianoEncryptString (gcry_cipher_hd_t h, const char *s) {
 	}
 
 	hexOutput = calloc (paddedInputLen*2+1, sizeof (*hexOutput));
-	for (size_t i = 0; i < paddedInputLen; i++) {
-		snprintf ((char * restrict) &hexOutput[i*2], 3, "%02x", paddedInput[i]);
+	size_t i;
+	for (i = 0; i < paddedInputLen; i++) {
+		snprintf ((char *) &hexOutput[i*2], 3, "%02x", paddedInput[i]);
 	}
 
 	free (paddedInput);

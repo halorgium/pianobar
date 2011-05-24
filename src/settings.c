@@ -103,7 +103,8 @@ void BarSettingsDestroy (BarSettings_t *settings) {
 	free (settings->device);
 	free (settings->inkey);
 	free (settings->outkey);
-	for (size_t i = 0; i < MSG_COUNT; i++) {
+	size_t i;
+	for (i = 0; i < MSG_COUNT; i++) {
 		free (settings->msgFormat[i].prefix);
 		free (settings->msgFormat[i].postfix);
 	}
@@ -161,12 +162,14 @@ void BarSettingsRead (BarSettings_t *settings) {
 	settings->msgFormat[MSG_LIST].prefix = strdup ("\t");
 	settings->msgFormat[MSG_LIST].postfix = NULL;
 
-	for (size_t i = 0; i < BAR_KS_COUNT; i++) {
+	size_t i;
+	for (i = 0; i < BAR_KS_COUNT; i++) {
 		settings->keys[i] = dispatchActions[i].defaultKey;
 	}
 
 	/* read config files */
-	for (size_t j = 0; j < sizeof (configfiles) / sizeof (*configfiles); j++) {
+	size_t j;
+	for (j = 0; j < sizeof (configfiles) / sizeof (*configfiles); j++) {
 		static const char *formatMsgPrefix = "format_msg_";
 		char key[256], val[256], path[PATH_MAX];
 		FILE *configfd;
@@ -289,7 +292,8 @@ void BarSettingsRead (BarSettings_t *settings) {
 			} else if (streq ("tls_fingerprint", key)) {
 				/* expects 40 byte hex-encoded sha1 */
 				if (strlen (val) == 40) {
-					for (size_t i = 0; i < 20; i++) {
+				size_t i;
+				for (i = 0; i < 20; i++) {
 						char hex[3];
 						memcpy (hex, &val[i*2], 2);
 						hex[2] = '\0';
@@ -301,7 +305,8 @@ void BarSettingsRead (BarSettings_t *settings) {
 				static const char *mapping[] = {"none", "info", "nowplaying",
 						"time", "err", "question", "list"};
 				const char *typeStart = key + strlen (formatMsgPrefix);
-				for (size_t i = 0; i < sizeof (mapping) / sizeof (*mapping); i++) {
+			size_t i;
+			for (i = 0; i < sizeof (mapping) / sizeof (*mapping); i++) {
 					if (streq (typeStart, mapping[i])) {
 						const char *formatPos = strstr (val, "%s");
 						
@@ -358,7 +363,7 @@ void BarSettingsWrite (PianoStation_t *station, BarSettings_t *settings) {
 	fprintf (fd, "volume = %i\n", settings->volume);
 	if (station != NULL) {
 		fprintf (fd, "autostart_station = %s\n", station->id);
-	}
+}
 
 	fclose (fd);
 }
